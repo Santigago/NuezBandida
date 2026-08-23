@@ -31,8 +31,8 @@ export default {
         cream: '#f7efe4',
       },
       fontFamily: {
-        display: ['"Playfair Display"', 'serif'],
-        body: ['"Poppins"', 'sans-serif'],
+        display: ['"JetBrains Mono"', 'monospace'],
+        body: ['"JetBrains Mono"', 'monospace'],
       },
     },
   },

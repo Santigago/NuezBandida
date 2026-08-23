@@ -1,4 +1,4 @@
-# NuezBandida
+# NuezBandida 🌰🥷
 
 Sitio web privado para nosotros dos: citas, lugares por visitar, recetas,
 videos, tips, moteles y nuestra lista de películas/series — con slideshow,
@@ -16,21 +16,21 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 ## Fase 0 — Configuración inicial
 - [x] Definir stack, decisiones y alcance (`PLAN.md`)
 - [x] Crear estructura del proyecto (React + Vite + Tailwind)
-- [ ] Crear proyecto en Supabase (URL + anon key)
-- [ ] Crear repositorio en GitHub y hacer el primer commit
-- [ ] Configurar `.env` local con las credenciales de Supabase
+- [x] Crear proyecto en Supabase (URL + anon key)
+- [x] Crear repositorio en GitHub y hacer el primer commit
+- [x] Configurar `.env` local con las credenciales de Supabase
 
 ## Fase 1 — Sistema de diseño y estructura base
 - [x] Paleta de colores (café dominante / burdeos en Moteles) vía variables CSS
 - [x] Tipografías (encabezados y cuerpo)
 - [x] Barra de navegación (Inicio, Citas, Lugares por Visitar, Recetas, Videos y Links, Tips, Moteles, Películas y Series)
 - [x] Layout responsive (menú hamburguesa en móvil)
-- [ ] Ajustes de estilo según feedback
+- [x] Ajustes de estilo según feedback
 
 ## Fase 2 — Autenticación
-- [ ] Login compartido (una sola contraseña para los dos)
-- [ ] Indicador de sesión iniciada
-- [ ] Proteger rutas privadas
+- [x] Login para cada usuario
+- [x] Indicador de sesión iniciada
+- [x] Proteger rutas privadas
 
 ## Fase 3 — Secciones de datos (CRUD)
 - [ ] Tablas en Supabase: dates_log, bucket_list, recipes, videos_links, tips, motel_ratings, watchlist

@@ -23,7 +23,7 @@ export default function Navbar() {
     }`
 
   return (
-    <header className="bg-[var(--color-primary)] sticky top-0 z-50 shadow-md">
+    <header className="sticky top-0 z-50 bg-gradient-to-b from-[var(--color-primary)] via-[var(--color-primary)]/90 to-transparent pb-8 -mb-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <NavLink to="/" className="font-display text-2xl text-cream tracking-wide">
@@ -58,7 +58,7 @@ export default function Navbar() {
 
       {/* Mobile nav */}
       {open && (
-        <nav className="lg:hidden flex flex-col gap-1 px-4 pb-4">
+        <nav className="lg:hidden flex flex-col gap-1 px-4 pb-4 bg-[var(--color-primary)]/95 backdrop-blur-sm rounded-b-xl">
           {LINKS.map((link) => (
             <NavLink key={link.to} to={link.to} className={linkClass} onClick={() => setOpen(false)}>
               {link.label}
