@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Sistema de temas:
+  Por defecto el café domina el sitio. En las vistas de Moteles,
+  el layout raíz recibe data-theme="motel" y el burdeos pasa a dominar.
+  Usamos variables CSS para que cualquier componente pueda adaptarse
+  sin duplicar lógica.
+*/
+:root {
+  --color-primary: theme('colors.coffee.700');
+  --color-primary-light: theme('colors.coffee.500');
+  --color-accent: theme('colors.burgundy.500');
+  --color-surface: theme('colors.cream');
+  --color-text: theme('colors.coffee.900');
+}
+
+[data-theme='motel'] {
+  --color-primary: theme('colors.burgundy.600');
+  --color-primary-light: theme('colors.burgundy.400');
+  --color-accent: theme('colors.coffee.500');
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: theme('fontFamily.body');
+}
+
+h1, h2, h3, h4 {
+  font-family: theme('fontFamily.display');
+}
