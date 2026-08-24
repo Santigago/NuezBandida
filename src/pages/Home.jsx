@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
+import { useIsAdmin } from '../hooks/useIsAdmin.js'
 import Slideshow from '../components/Slideshow.jsx'
+import SlideshowManager from '../components/SlideshowManager.jsx'
 import Tablero from '../components/Tablero.jsx'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import { useRandomBackground } from '../hooks/useRandomBackground.js'
@@ -56,6 +58,7 @@ function Recomendaciones() {
 
 export default function Home() {
   const background = useRandomBackground()
+  const { isAdmin } = useIsAdmin()
 
   return (
     <div className="relative">
@@ -74,6 +77,7 @@ export default function Home() {
 
         <section>
           <Slideshow />
+          {isAdmin && <SlideshowManager />}
         </section>
 
         <section>

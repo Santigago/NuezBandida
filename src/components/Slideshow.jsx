@@ -39,7 +39,7 @@ export default function Slideshow() {
   if (error || shuffled.length === 0) {
     return (
       <div className="h-64 sm:h-96 rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 flex items-center justify-center text-coffee-500 text-center px-4">
-        Todavía no hay fotos. Agrega filas a <code>fotos_slideshow</code> en Supabase.
+        Agregar imagenes
       </div>
     )
   }

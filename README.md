@@ -48,8 +48,8 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Tablero compartido de fotos/notas
 
 ## Fase 5 — Subida de imágenes y almacenamiento
-- [ ] Integración con Supabase Storage (slideshow + tablero)
-- [ ] Compresión/resize básico al subir
+- [x] Integración con Supabase Storage (slideshow + tablero)
+- [x] Compresión/resize básico al subir
 
 ## Fase 6 — Pulido
 - [ ] Animaciones y transiciones
