@@ -60,8 +60,8 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Cambio de tab recetas a uno mas conveniente usando solo links de instagram
 
 ## Fase 7 — Despliegue
-- [ ] Deploy en Vercel conectado a Supabase
-- [ ] Link compartido funcionando
+- [x] Deploy en Vercel conectado a Supabase
+- [x] Link compartido funcionando
 
 ## Fase 8 — Extensiones futuras (opcional, cuando quieran)
 - [x] Recomendaciones más inteligentes
