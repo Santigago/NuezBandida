@@ -1,14 +1,22 @@
 import { useMemo, useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
-import TagInput from '../components/TagInput.jsx'
+import TagSelector from '../components/TagSelector.jsx'
+import FilterMenu from '../components/FilterMenu.jsx'
+import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import { TAG_OPTIONS } from '../lib/tagOptions.js'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
 
 const emptyForm = { nombre: '', tags: [], estado: 'por_visitar', notas: '' }
 
-export default function LugaresPorVisitar() {
+const ESTADO_OPTIONS = [
+  { value: 'por_visitar', label: 'Por visitar' },
+  { value: 'visitado', label: 'Visitado' },
+]
+
+export default function Lugares() {
   const { items, loading, error, addItem, updateItem, deleteItem } = useSupabaseTable('lugares')
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
@@ -29,6 +37,8 @@ export default function LugaresPorVisitar() {
     const matchesEstado = !estadoFilter || i.estado === estadoFilter
     return matchesSearch && matchesTag && matchesEstado
   })
+
+  const activeFilterCount = (tagFilter ? 1 : 0) + (estadoFilter ? 1 : 0)
 
   function resetForm() {
     setForm(emptyForm)
@@ -58,7 +68,7 @@ export default function LugaresPorVisitar() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-3xl text-coffee-800 mb-2">Lugares por Visitar</h1>
+      <h1 className="text-3xl text-coffee-800 mb-2">Lugares</h1>
       <p className="text-coffee-600 mb-6">
         Lugares que queremos conocer juntos, con tags y estado.
       </p>
@@ -90,7 +100,7 @@ export default function LugaresPorVisitar() {
 
         <div>
           <label className="block text-sm text-coffee-700 mb-1">Tags</label>
-          <TagInput tags={form.tags} onChange={(tags) => setForm({ ...form, tags })} />
+          <TagSelector tags={form.tags} onChange={(tags) => setForm({ ...form, tags })} options={TAG_OPTIONS} />
         </div>
 
         <div>
@@ -127,17 +137,15 @@ export default function LugaresPorVisitar() {
           onChange={(e) => setSearch(e.target.value)}
           className={`${inputClass} sm:max-w-xs`}
         />
-        <select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} className={`${inputClass} sm:max-w-xs`}>
-          <option value="">Todos los tags</option>
-          {allTags.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
-        <select value={estadoFilter} onChange={(e) => setEstadoFilter(e.target.value)} className={`${inputClass} sm:max-w-xs`}>
-          <option value="">Todos los estados</option>
-          <option value="por_visitar">Por visitar</option>
-          <option value="visitado">Visitado</option>
-        </select>
+        <FilterMenu activeCount={activeFilterCount}>
+          <FilterChipGroup title="Estado" options={ESTADO_OPTIONS} value={estadoFilter} onChange={setEstadoFilter} />
+          <FilterChipGroup
+            title="Tags"
+            options={allTags.map((t) => ({ value: t, label: t }))}
+            value={tagFilter}
+            onChange={setTagFilter}
+          />
+        </FilterMenu>
       </div>
 
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}
@@ -161,9 +169,7 @@ export default function LugaresPorVisitar() {
               <button
                 onClick={() => toggleEstado(item)}
                 className={`mt-2 text-xs px-2 py-0.5 rounded-full ${
-                  item.estado === 'visitado'
-                    ? 'bg-coffee-500 text-cream'
-                    : 'bg-coffee-100 text-coffee-600'
+                  item.estado === 'visitado' ? 'bg-coffee-500 text-cream' : 'bg-coffee-100 text-coffee-600'
                 }`}
               >
                 {item.estado === 'visitado' ? 'Visitado ✓' : 'Por visitar'}

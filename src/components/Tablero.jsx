@@ -57,7 +57,7 @@ export default function Tablero() {
             value={form.texto}
             onChange={(e) => setForm({ ...form, texto: e.target.value })}
             rows={2}
-            placeholder="Deja una nota para el otro..."
+            placeholder="Dime algo..."
             className="w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
           />
         </div>
@@ -66,7 +66,6 @@ export default function Tablero() {
           <ImageUploader folder="tablero" onUploaded={(url) => setForm((f) => ({ ...f, foto_url: url }))} />
           {form.foto_url && <img src={form.foto_url} alt="Vista previa" className="mt-2 h-24 rounded-lg object-cover" />}
         </div>
-        <p className="text-xs text-coffee-400">Publicar reemplaza tu post anterior en el tablero.</p>
         <button
           type="submit"
           disabled={saving}
@@ -81,7 +80,7 @@ export default function Tablero() {
         <LoadingSpinner />
       ) : items.length === 0 ? (
         <div className="rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 p-10 text-center text-coffee-500">
-          El tablero está vacío. Sé el primero en dejar algo.
+          Tablero vacío :(
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">

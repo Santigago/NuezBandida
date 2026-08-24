@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
-import TagInput from '../components/TagInput.jsx'
+import TagSelector from '../components/TagSelector.jsx'
+import FilterMenu from '../components/FilterMenu.jsx'
+import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import { TAG_OPTIONS } from '../lib/tagOptions.js'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
@@ -82,7 +85,7 @@ export default function Citas() {
 
         <div>
           <label className="block text-sm text-coffee-700 mb-1">Tags</label>
-          <TagInput tags={form.tags} onChange={(tags) => setForm({ ...form, tags })} />
+          <TagSelector tags={form.tags} onChange={(tags) => setForm({ ...form, tags })} options={TAG_OPTIONS} />
         </div>
 
         <div>
@@ -119,12 +122,14 @@ export default function Citas() {
           onChange={(e) => setSearch(e.target.value)}
           className={`${inputClass} sm:max-w-xs`}
         />
-        <select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)} className={`${inputClass} sm:max-w-xs`}>
-          <option value="">Todos los tags</option>
-          {allTags.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+        <FilterMenu activeCount={tagFilter ? 1 : 0}>
+          <FilterChipGroup
+            title="Tags"
+            options={allTags.map((t) => ({ value: t, label: t }))}
+            value={tagFilter}
+            onChange={setTagFilter}
+          />
+        </FilterMenu>
       </div>
 
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}

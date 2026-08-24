@@ -1,11 +1,25 @@
 import { useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
+import TagSelector from '../components/TagSelector.jsx'
+import FilterMenu from '../components/FilterMenu.jsx'
+import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import { PELICULA_TAG_OPTIONS } from '../lib/tagOptionsPeliculas.js'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
 
-const emptyForm = { titulo: '', tipo: 'pelicula', visto: false, notas: '' }
+const emptyForm = { titulo: '', tipo: 'pelicula', visto: false, tags: [], notas: '' }
+
+const TIPO_OPTIONS = [
+  { value: 'pelicula', label: 'Película' },
+  { value: 'serie', label: 'Serie' },
+]
+
+const VISTO_OPTIONS = [
+  { value: 'visto', label: 'Vista' },
+  { value: 'no_visto', label: 'Pendiente' },
+]
 
 export default function PeliculasSeries() {
   const { items, loading, error, addItem, updateItem, deleteItem } = useSupabaseTable('peliculas_series')
@@ -14,15 +28,18 @@ export default function PeliculasSeries() {
   const [search, setSearch] = useState('')
   const [tipoFilter, setTipoFilter] = useState('')
   const [vistoFilter, setVistoFilter] = useState('')
+  const [tagFilter, setTagFilter] = useState('')
   const [saving, setSaving] = useState(false)
 
   const filtered = items.filter((i) => {
     const matchesSearch = i.titulo?.toLowerCase().includes(search.toLowerCase())
     const matchesTipo = !tipoFilter || i.tipo === tipoFilter
-    const matchesVisto =
-      vistoFilter === '' || (vistoFilter === 'visto' ? i.visto : !i.visto)
-    return matchesSearch && matchesTipo && matchesVisto
+    const matchesVisto = !vistoFilter || (vistoFilter === 'visto' ? i.visto : !i.visto)
+    const matchesTag = !tagFilter || (i.tags || []).includes(tagFilter)
+    return matchesSearch && matchesTipo && matchesVisto && matchesTag
   })
+
+  const activeFilterCount = (tipoFilter ? 1 : 0) + (vistoFilter ? 1 : 0) + (tagFilter ? 1 : 0)
 
   function resetForm() {
     setForm(emptyForm)
@@ -42,7 +59,13 @@ export default function PeliculasSeries() {
   }
 
   function startEdit(item) {
-    setForm({ titulo: item.titulo, tipo: item.tipo || 'pelicula', visto: item.visto, notas: item.notas || '' })
+    setForm({
+      titulo: item.titulo,
+      tipo: item.tipo || 'pelicula',
+      visto: item.visto,
+      tags: item.tags || [],
+      notas: item.notas || '',
+    })
     setEditingId(item.id)
   }
 
@@ -69,16 +92,18 @@ export default function PeliculasSeries() {
           </div>
           <div>
             <label className="block text-sm text-coffee-700 mb-1">Tipo</label>
-            <select
-              value={form.tipo}
-              onChange={(e) => setForm({ ...form, tipo: e.target.value })}
-              className={inputClass}
-            >
+            <select value={form.tipo} onChange={(e) => setForm({ ...form, tipo: e.target.value })} className={inputClass}>
               <option value="pelicula">Película</option>
               <option value="serie">Serie</option>
             </select>
           </div>
         </div>
+
+        <div>
+          <label className="block text-sm text-coffee-700 mb-1">Géneros</label>
+          <TagSelector tags={form.tags} onChange={(tags) => setForm({ ...form, tags })} options={PELICULA_TAG_OPTIONS} />
+        </div>
+
         <label className="flex items-center gap-2 text-sm text-coffee-700">
           <input
             type="checkbox"
@@ -87,6 +112,7 @@ export default function PeliculasSeries() {
           />
           Ya la vimos
         </label>
+
         <div>
           <label className="block text-sm text-coffee-700 mb-1">Notas</label>
           <textarea
@@ -96,6 +122,7 @@ export default function PeliculasSeries() {
             className={inputClass}
           />
         </div>
+
         <div className="flex gap-3">
           <button
             type="submit"
@@ -120,16 +147,16 @@ export default function PeliculasSeries() {
           onChange={(e) => setSearch(e.target.value)}
           className={`${inputClass} sm:max-w-xs`}
         />
-        <select value={tipoFilter} onChange={(e) => setTipoFilter(e.target.value)} className={`${inputClass} sm:max-w-xs`}>
-          <option value="">Todos</option>
-          <option value="pelicula">Películas</option>
-          <option value="serie">Series</option>
-        </select>
-        <select value={vistoFilter} onChange={(e) => setVistoFilter(e.target.value)} className={`${inputClass} sm:max-w-xs`}>
-          <option value="">Vistas y no vistas</option>
-          <option value="visto">Vistas</option>
-          <option value="no_visto">No vistas</option>
-        </select>
+        <FilterMenu activeCount={activeFilterCount}>
+          <FilterChipGroup title="Tipo" options={TIPO_OPTIONS} value={tipoFilter} onChange={setTipoFilter} />
+          <FilterChipGroup title="Estado" options={VISTO_OPTIONS} value={vistoFilter} onChange={setVistoFilter} />
+          <FilterChipGroup
+            title="Géneros"
+            options={PELICULA_TAG_OPTIONS.map((t) => ({ value: t, label: t }))}
+            value={tagFilter}
+            onChange={setTagFilter}
+          />
+        </FilterMenu>
       </div>
 
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}
@@ -150,7 +177,7 @@ export default function PeliculasSeries() {
                   <button onClick={() => deleteItem(item.id)} className="text-coffee-500 hover:text-burgundy-500">Eliminar</button>
                 </div>
               </div>
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex flex-wrap items-center gap-2 mt-2">
                 <span className="text-xs bg-coffee-100 text-coffee-600 px-2 py-0.5 rounded-full">
                   {item.tipo === 'serie' ? 'Serie' : 'Película'}
                 </span>
@@ -163,6 +190,13 @@ export default function PeliculasSeries() {
                   {item.visto ? 'Vista ✓' : 'Pendiente'}
                 </button>
               </div>
+              {item.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {item.tags.map((t) => (
+                    <span key={t} className="text-xs bg-coffee-100 text-coffee-600 px-2 py-0.5 rounded-full">{t}</span>
+                  ))}
+                </div>
+              )}
               {item.notas && <p className="text-sm text-coffee-600 mt-2">{item.notas}</p>}
               <p className="text-xs text-coffee-300 mt-2">— {item.creado_por}</p>
             </div>

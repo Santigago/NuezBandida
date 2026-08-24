@@ -4,10 +4,8 @@ import { NavLink } from 'react-router-dom'
 const LINKS = [
   { to: '/', label: 'Inicio' },
   { to: '/citas', label: 'Citas' },
-  { to: '/lugares-por-visitar', label: 'Lugares por Visitar' },
+  { to: '/lugares', label: 'Lugares' },
   { to: '/recetas', label: 'Recetas' },
-  { to: '/videos-y-links', label: 'Videos y Links' },
-  { to: '/tips', label: 'Tips' },
   { to: '/moteles', label: 'Moteles' },
   { to: '/peliculas-y-series', label: 'Películas y Series' },
 ]
@@ -17,21 +15,19 @@ export default function Navbar() {
 
   const linkClass = ({ isActive }) =>
     `px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
-      isActive
-        ? 'bg-[var(--color-accent)] text-cream'
-        : 'text-cream/90 hover:bg-white/10'
+      isActive ? 'bg-[var(--color-accent)] text-cream' : 'text-cream/90 hover:bg-white/10'
     }`
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-b from-[var(--color-primary)] via-[var(--color-primary)]/90 to-transparent pb-8 -mb-8">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <NavLink to="/" className="font-display text-2xl text-cream tracking-wide">
+        <div className="grid grid-cols-3 items-center h-16">
+          <NavLink to="/" className="font-display text-2xl text-cream tracking-wide justify-self-start">
             NuezBandida
           </NavLink>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Nav de escritorio, centrado */}
+          <nav className="hidden lg:flex items-center gap-1 justify-self-center">
             {LINKS.map((link) => (
               <NavLink key={link.to} to={link.to} className={linkClass}>
                 {link.label}
@@ -39,9 +35,9 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Mobile toggle */}
+          {/* Toggle móvil */}
           <button
-            className="lg:hidden text-cream p-2"
+            className="lg:hidden text-cream p-2 justify-self-end"
             onClick={() => setOpen((o) => !o)}
             aria-label="Abrir menú"
           >
@@ -56,7 +52,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile nav */}
       {open && (
         <nav className="lg:hidden flex flex-col gap-1 px-4 pb-4 bg-[var(--color-primary)]/95 backdrop-blur-sm rounded-b-xl">
           {LINKS.map((link) => (
