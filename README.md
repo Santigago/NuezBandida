@@ -1,4 +1,4 @@
-# NuezBandida 🌰🥷
+# NuezBandida
 
 Sitio web privado para nosotros dos: citas, lugares por visitar, recetas,
 videos, tips, moteles y nuestra lista de películas/series — con slideshow,
@@ -33,13 +33,13 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Proteger rutas privadas
 
 ## Fase 3 — Secciones de datos (CRUD)
-- [ ] Tablas en Supabase: dates_log, bucket_list, recipes, videos_links, tips, motel_ratings, watchlist
-- [ ] Agregar / editar / eliminar / ver en cada sección
-- [ ] Estrellas/calificación para moteles
-- [ ] Toggle visto/no visto para películas y series
-- [ ] Tags en lugares (cafetería, parque, museo, etc.)
-- [ ] Estado por lugar: Visitado / Por visitar
-- [ ] Buscador por nombre + filtros por tag y por estado
+- [x] Tablas en Supabase: dates_log, bucket_list, recipes, videos_links, tips, motel_ratings, watchlist
+- [x] Agregar / editar / eliminar / ver en cada sección
+- [x] Estrellas/calificación para moteles
+- [x] Toggle visto/no visto para películas y series
+- [x] Tags en lugares (cafetería, parque, museo, etc.)
+- [x] Estado por lugar: Visitado / Por visitar
+- [x] Buscador por nombre + filtros por tag y por estado
 
 ## Fase 4 — Página de inicio
 - [ ] Slideshow con nuestras fotos
