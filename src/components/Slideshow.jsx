@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
+import LoadingSpinner from './LoadingSpinner.jsx'
 
 const INTERVAL_MS = 5000
 
@@ -19,7 +20,6 @@ export default function Slideshow() {
   })
   const [index, setIndex] = useState(0)
 
-  // Se mezcla una sola vez por carga/visita, no en cada render
   const shuffled = useMemo(() => shuffle(items), [items.length])
 
   useEffect(() => {
@@ -30,22 +30,22 @@ export default function Slideshow() {
 
   if (loading) {
     return (
-      <div className="h-64 sm:h-96 rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 flex items-center justify-center text-coffee-500">
-        Cargando fotos...
+      <div className="aspect-video rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 flex items-center justify-center">
+        <LoadingSpinner label="Cargando fotos..." />
       </div>
     )
   }
 
   if (error || shuffled.length === 0) {
     return (
-      <div className="h-64 sm:h-96 rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 flex items-center justify-center text-coffee-500 text-center px-4">
-        Agregar imagenes
+      <div className="aspect-video rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 flex items-center justify-center text-coffee-500 text-center px-4">
+        Agregar imágenes
       </div>
     )
   }
 
   return (
-    <div className="relative h-64 sm:h-96 rounded-2xl overflow-hidden bg-coffee-900">
+    <div className="relative aspect-video rounded-2xl overflow-hidden bg-coffee-900">
       {shuffled.map((foto, i) => (
         <img
           key={foto.id}

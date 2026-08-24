@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import TagInput from '../components/TagInput.jsx'
+import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
@@ -141,7 +142,7 @@ export default function LugaresPorVisitar() {
 
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}
       {loading ? (
-        <p className="text-coffee-500">Cargando...</p>
+        <LoadingSpinner />
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 p-10 text-center text-coffee-500">
           No hay lugares todavía.
@@ -149,7 +150,7 @@ export default function LugaresPorVisitar() {
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {filtered.map((item) => (
-            <div key={item.id} className="bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
+            <div key={item.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
               <div className="flex justify-between items-start">
                 <h3 className="font-medium text-coffee-800">{item.nombre}</h3>
                 <div className="flex gap-2 text-sm">

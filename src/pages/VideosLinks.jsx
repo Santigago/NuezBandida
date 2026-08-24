@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
+import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
@@ -101,7 +102,7 @@ export default function VideosLinks() {
 
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}
       {loading ? (
-        <p className="text-coffee-500">Cargando...</p>
+        <LoadingSpinner />
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 p-10 text-center text-coffee-500">
           No hay videos o links todavía.
@@ -109,7 +110,7 @@ export default function VideosLinks() {
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {filtered.map((item) => (
-            <div key={item.id} className="bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
+            <div key={item.id} className="card-hoverbg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
               <div className="flex justify-between items-start">
                 
                   href={item.url}

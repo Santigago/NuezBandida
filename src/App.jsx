@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -16,11 +17,18 @@ export default function App() {
   const location = useLocation()
   const isMotelTheme = location.pathname.startsWith('/moteles')
   const isLoginPage = location.pathname === '/login'
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    setVisible(false)
+    const id = requestAnimationFrame(() => setVisible(true))
+    return () => cancelAnimationFrame(id)
+  }, [location.pathname])
 
   return (
     <div data-theme={isMotelTheme ? 'motel' : 'default'} className="min-h-screen flex flex-col">
       {!isLoginPage && <Navbar />}
-      <main className="flex-1">
+      <main className={`flex-1 transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0'}`}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/salir" element={<ProtectedRoute><Salir /></ProtectedRoute>} />

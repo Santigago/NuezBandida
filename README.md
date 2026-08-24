@@ -52,9 +52,9 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Compresión/resize básico al subir
 
 ## Fase 6 — Pulido
-- [ ] Animaciones y transiciones
-- [ ] Estados vacíos y de carga
-- [ ] Revisión completa en móvil
+- [x] Animaciones y transiciones
+- [x] Estados vacíos y de carga
+- [x] Revisión completa en móvil
 
 ## Fase 7 — Despliegue
 - [ ] Deploy en Vercel conectado a Supabase

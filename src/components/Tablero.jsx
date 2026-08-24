@@ -3,6 +3,7 @@ import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import { supabase } from '../lib/supabaseClient.js'
 import { deleteImageByUrl } from '../lib/imageUpload.js'
 import ImageUploader from './ImageUploader.jsx'
+import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 const emptyForm = { texto: '', foto_url: '' }
 
@@ -77,7 +78,7 @@ export default function Tablero() {
 
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}
       {loading ? (
-        <p className="text-coffee-500">Cargando...</p>
+        <LoadingSpinner />
       ) : items.length === 0 ? (
         <div className="rounded-2xl bg-coffee-100 border-2 border-dashed border-coffee-300 p-10 text-center text-coffee-500">
           El tablero está vacío. Sé el primero en dejar algo.
@@ -85,7 +86,7 @@ export default function Tablero() {
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {items.map((post) => (
-            <div key={post.id} className="bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
+            <div key={post.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
               {post.foto_url && <img src={post.foto_url} alt="" className="w-full h-40 object-cover rounded-lg mb-3" />}
               {post.texto && <p className="text-sm text-coffee-700">{post.texto}</p>}
               <div className="flex justify-between items-center mt-3">
