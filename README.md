@@ -56,8 +56,8 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Estados vacíos y de carga
 - [x] Revisión completa en móvil
 - [x] Modificacion al sistema de tags para seleccion de tags predeterminados
-- [x] Agregar boton de filtro para busqueda de lugares, citas, recetas y peliculas/series
 - [x] Limpiar tabs que no se usaran
+- [x] Cambio de tab recetas a uno mas conveniente usando solo links de instagram
 
 ## Fase 7 — Despliegue
 - [ ] Deploy en Vercel conectado a Supabase
@@ -65,7 +65,7 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 
 ## Fase 8 — Extensiones futuras (opcional, cuando quieran)
 - [x] Recomendaciones más inteligentes
-- [x] Cambio de tab recetas a uno mas conveniente usando solo links de instagram
+- [x] Agregar boton de filtro para busqueda de lugares, citas, recetas y peliculas/series
 - [ ] Mapa embebido para ubicaciones
 - [ ] Notificaciones al agregar algo al tablero
 - [ ] Vista de calendario de citas pasadas
