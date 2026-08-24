@@ -28,19 +28,31 @@ export function useSupabaseTable(tableName, { orderBy = 'created_at', ascending 
     const { data: userData } = await supabase.auth.getUser()
     const creado_por = userData?.user?.user_metadata?.nombre || userData?.user?.email
     const { error } = await supabase.from(tableName).insert([{ ...values, creado_por }])
-    if (error) throw error
+    if (error) {
+      setError(error.message)
+      throw error
+    }
+    setError(null)
     await refresh()
   }
 
   async function updateItem(id, values) {
     const { error } = await supabase.from(tableName).update(values).eq('id', id)
-    if (error) throw error
+    if (error) {
+      setError(error.message)
+      throw error
+    }
+    setError(null)
     await refresh()
   }
 
   async function deleteItem(id) {
     const { error } = await supabase.from(tableName).delete().eq('id', id)
-    if (error) throw error
+    if (error) {
+      setError(error.message)
+      throw error
+    }
+    setError(null)
     await refresh()
   }
 

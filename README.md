@@ -42,10 +42,10 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Buscador por nombre + filtros por tag y por estado
 
 ## Fase 4 — Página de inicio
-- [ ] Slideshow con nuestras fotos
-- [ ] Fondo aleatorio (entre las 2 fotos de Hubble elegidas, separado del slideshow)
-- [ ] Recomendaciones ("a dónde ir después") desde lugares marcados Por visitar
-- [ ] Tablero compartido de fotos/notas
+- [x] Slideshow con nuestras fotos
+- [x] Fondo aleatorio (entre las 2 fotos de Hubble elegidas, separado del slideshow)
+- [x] Recomendaciones ("a dónde ir después") desde lugares marcados Por visitar
+- [x] Tablero compartido de fotos/notas
 
 ## Fase 5 — Subida de imágenes y almacenamiento
 - [ ] Integración con Supabase Storage (slideshow + tablero)
