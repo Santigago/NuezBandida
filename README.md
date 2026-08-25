@@ -70,6 +70,8 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [ ] Notificaciones al agregar algo al tablero
 - [ ] Vista de calendario de citas pasadas
 - [ ] Exportar "anuario" en PDF al fin de año
+- [ ] Agregar diferenciación en el calendario para citas normales y citas con sexo
+- [ ] agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
 
 ---
 
