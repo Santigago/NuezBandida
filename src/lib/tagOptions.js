@@ -11,4 +11,7 @@ export const TAG_OPTIONS = [
   'cultura',
   'columpio',
   'iglesia',
+  'motel',
+  'intimo',
+  'romántico',
 ]

@@ -1,11 +1,12 @@
-import { useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import { supabase } from '../lib/supabaseClient.js'
 import { deleteImageByUrl } from '../lib/imageUpload.js'
+import { useState, useEffect } from 'react'
 import ImageUploader from './ImageUploader.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 const emptyForm = { texto: '', foto_url: '' }
+const REACTION_EMOJIS = ['❤️', '😂', '😮', '👍', '🔥']
 
 export default function Tablero() {
   const { items, loading, refresh } = useSupabaseTable('tablero')
@@ -13,6 +14,13 @@ export default function Tablero() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
   const [formOpen, setFormOpen] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setCurrentUser(data?.user?.user_metadata?.nombre || data?.user?.email)
+    })
+  }, [])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -26,7 +34,10 @@ export default function Tablero() {
 
       const { error: upsertError } = await supabase
         .from('tablero')
-        .upsert({ ...form, creado_por, created_at: new Date().toISOString() }, { onConflict: 'creado_por' })
+        .upsert(
+          { ...form, creado_por, created_at: new Date().toISOString(), reacciones: {} },
+          { onConflict: 'creado_por' }
+        )
       if (upsertError) throw upsertError
 
       if (previous?.foto_url && previous.foto_url !== form.foto_url) {
@@ -50,6 +61,27 @@ export default function Tablero() {
     await refresh()
   }
 
+  async function toggleReaction(post, emoji) {
+    if (!currentUser) return
+    const reacciones = { ...(post.reacciones || {}) }
+    const current = reacciones[emoji] || []
+    const alreadyReacted = current.includes(currentUser)
+
+    reacciones[emoji] = alreadyReacted
+      ? current.filter((u) => u !== currentUser)
+      : [...current, currentUser]
+
+    if (reacciones[emoji].length === 0) delete reacciones[emoji]
+
+    const { error: updateError } = await supabase
+      .from('tablero')
+      .update({ reacciones })
+      .eq('id', post.id)
+
+    if (updateError) return setError(updateError.message)
+    await refresh()
+  }
+
   return (
     <div>
       {error && <p className="text-burgundy-500 mb-4">{error}</p>}
@@ -66,6 +98,32 @@ export default function Tablero() {
             <div key={post.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
               {post.foto_url && <img src={post.foto_url} alt="" className="w-full h-40 object-cover rounded-lg mb-3" />}
               {post.texto && <p className="text-sm text-coffee-700">{post.texto}</p>}
+
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {REACTION_EMOJIS.map((emoji) => {
+                  const reactedBy = post.reacciones?.[emoji] || []
+                  const iReacted = currentUser && reactedBy.includes(currentUser)
+                  return (
+                    <button
+                      key={emoji}
+                      onClick={() => toggleReaction(post, emoji)}
+                      className={`text-sm px-2 py-1 rounded-full border transition-colors flex items-center gap-1 ${
+                        iReacted
+                          ? 'bg-[var(--color-primary)] border-[var(--color-primary)]'
+                          : 'bg-white border-coffee-200 hover:border-coffee-400'
+                      }`}
+                    >
+                      <span>{emoji}</span>
+                      {reactedBy.length > 0 && (
+                        <span className={`text-xs ${iReacted ? 'text-cream' : 'text-coffee-500'}`}>
+                          {reactedBy.length}
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+
               <div className="flex justify-between items-center mt-3">
                 <p className="text-xs text-coffee-300">— {post.creado_por}</p>
                 <button onClick={() => handleDelete(post)} className="text-xs text-coffee-400 hover:text-burgundy-500">
@@ -77,7 +135,6 @@ export default function Tablero() {
         </div>
       )}
 
-      {/* Add button / collapsible form */}
       {!formOpen ? (
         <button
           onClick={() => setFormOpen(true)}

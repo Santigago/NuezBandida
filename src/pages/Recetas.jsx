@@ -45,6 +45,7 @@ export default function Recetas() {
   function startEdit(item) {
     setForm({ nombre: item.nombre, url: item.url || '', tags: item.tags || [] })
     setEditingId(item.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (

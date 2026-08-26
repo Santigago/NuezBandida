@@ -75,9 +75,10 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [ ] Agregar boton para ir a jellyfin en la seccion de peliculas y series
 - [ ] Agregar redireccion a jellifyn si la pelicual o serie existe\
 - [ ] Agregar seccion a solicitud de agregar a jellyfin si no existe la pelicula o serie
-- [ ] Agregar funcion para anadir reacciones a posts del tablero
+- [x] Agregar funcion para anadir reacciones a posts del tablero
 - [x] Agregar tab para rating de estrellas de posiiones sexuales
-- [ ] Cambiar comportamiento de boton de editar cartas para subir hasta arriba de la pagina
+- [x] Cambiar comportamiento de boton de editar cartas para subir hasta arriba de la pagina
+- [x] Agregar boton a calendario para anadir citas en dias donde no haya
 
 ---
 

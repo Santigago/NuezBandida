@@ -40,15 +40,16 @@ function Productos() {
     }
   }
 
-  function startEdit(item) {
+    function startEdit(item) {
     setForm({
-      nombre: item.nombre,
-      tipo: item.tipo || '',
-      calificacion: item.calificacion || 0,
-      notas: item.notas || '',
+        nombre: item.nombre,
+        tipo: item.tipo || '',
+        calificacion: item.calificacion || 0,
+        notas: item.notas || '',
     })
     setEditingId(item.id)
-  }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
   return (
     <div className="space-y-6">
@@ -182,15 +183,16 @@ function Posiciones() {
       setSaving(false)
     }
   }
-
-  function startEdit(item) {
+  
+    function startEdit(item) {
     setForm({
-      nombre: item.nombre,
-      calificacion: item.calificacion || 0,
-      notas: item.notas || '',
+        nombre: item.nombre,
+        calificacion: item.calificacion || 0,
+        notas: item.notas || '',
     })
     setEditingId(item.id)
-  }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
   return (
     <div className="space-y-6">

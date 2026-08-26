@@ -37,6 +37,7 @@ export default function Moteles() {
   function startEdit(item) {
     setForm({ nombre: item.nombre, calificacion: item.calificacion || 0, notas: item.notas || '' })
     setEditingId(item.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (

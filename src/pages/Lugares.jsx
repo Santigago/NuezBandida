@@ -60,6 +60,7 @@ export default function Lugares() {
   function startEdit(item) {
     setForm({ nombre: item.nombre, tags: item.tags || [], estado: item.estado, notas: item.notas || '' })
     setEditingId(item.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function toggleEstado(item) {

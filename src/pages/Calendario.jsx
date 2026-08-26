@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import TagSelector from '../components/TagSelector.jsx'
+import { TAG_OPTIONS } from '../lib/tagOptions.js'
 
 function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate()
@@ -18,12 +20,22 @@ const MESES = [
 
 const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 
+const TIPO_OPTIONS = [
+  { value: 'sin_sexo', label: 'Cita normal' },
+  { value: 'con_sexo', label: 'Cita íntima' },
+]
+
+const emptyQuickForm = { lugar: '', tags: [], notas: '', tipo: 'sin_sexo' }
+
 export default function Calendario() {
-  const { items: citas, loading } = useSupabaseTable('citas')
+  const { items: citas, loading, addItem } = useSupabaseTable('citas')
   const today = new Date()
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
   const [selected, setSelected] = useState(null)
+  const [quickAddOpen, setQuickAddOpen] = useState(false)
+  const [quickForm, setQuickForm] = useState(emptyQuickForm)
+  const [saving, setSaving] = useState(false)
 
   const citasByDate = useMemo(() => {
     const map = {}
@@ -43,24 +55,44 @@ export default function Calendario() {
     if (month === 0) { setMonth(11); setYear(y => y - 1) }
     else setMonth(m => m - 1)
     setSelected(null)
+    setQuickAddOpen(false)
   }
 
   function nextMonth() {
     if (month === 11) { setMonth(0); setYear(y => y + 1) }
     else setMonth(m => m + 1)
     setSelected(null)
+    setQuickAddOpen(false)
   }
 
   function dateStr(day) {
     return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
   }
 
-  // For a date, determine the "dominant" tipo to decide heart color
-  // If any cita that day is con_sexo → burgundy, otherwise coffee
   function heartColor(ds) {
     const list = citasByDate[ds] || []
     const hasIntima = list.some((c) => c.tipo === 'con_sexo')
     return hasIntima ? 'text-burgundy-500' : 'text-coffee-500'
+  }
+
+  function selectDay(ds) {
+    const isSame = ds === selected
+    setSelected(isSame ? null : ds)
+    setQuickAddOpen(false)
+    setQuickForm(emptyQuickForm)
+  }
+
+  async function handleQuickAdd(e) {
+    e.preventDefault()
+    if (!quickForm.lugar.trim()) return
+    setSaving(true)
+    try {
+      await addItem({ ...quickForm, fecha: selected })
+      setQuickForm(emptyQuickForm)
+      setQuickAddOpen(false)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const selectedCitas = selected ? (citasByDate[selected] || []) : []
@@ -116,7 +148,7 @@ export default function Calendario() {
                 return (
                   <button
                     key={day}
-                    onClick={() => setSelected(isSelected ? null : ds)}
+                    onClick={() => selectDay(ds)}
                     className={`h-14 border-b border-r border-coffee-50 flex flex-col items-center justify-start pt-1.5 gap-0.5 transition-colors
                       ${isSelected ? 'bg-coffee-100' : 'hover:bg-coffee-50/60'}
                     `}
@@ -144,10 +176,21 @@ export default function Calendario() {
                   weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
                 })}
               </p>
+
               {selectedCitas.length === 0 ? (
-                <p className="text-sm text-coffee-500">Sin citas este día.</p>
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <p className="text-sm text-coffee-500">Sin citas este día.</p>
+                  {!quickAddOpen && (
+                    <button
+                      onClick={() => setQuickAddOpen(true)}
+                      className="text-xs px-3 py-1.5 rounded-full bg-[var(--color-primary)] text-cream hover:opacity-90 transition-opacity whitespace-nowrap"
+                    >
+                      + Agregar cita
+                    </button>
+                  )}
+                </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-2 mb-3">
                   {selectedCitas.map((c) => (
                     <div key={c.id} className="bg-white rounded-xl p-3 border border-coffee-100 shadow-sm">
                       <div className="flex items-center gap-2">
@@ -174,6 +217,79 @@ export default function Calendario() {
                     </div>
                   ))}
                 </div>
+              )}
+
+              {quickAddOpen && (
+                <form onSubmit={handleQuickAdd} className="bg-white rounded-xl p-4 border border-coffee-100 space-y-3">
+                  <div>
+                    <label className="block text-xs text-coffee-700 mb-1">Lugar</label>
+                    <input
+                      type="text"
+                      required
+                      value={quickForm.lugar}
+                      onChange={(e) => setQuickForm({ ...quickForm, lugar: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs text-coffee-700 mb-1">Tipo</label>
+                    <div className="flex gap-2">
+                      {TIPO_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setQuickForm({ ...quickForm, tipo: opt.value })}
+                          className={`px-3 py-1.5 rounded-lg text-xs border transition-colors ${
+                            quickForm.tipo === opt.value
+                              ? opt.value === 'con_sexo'
+                                ? 'bg-burgundy-500 border-burgundy-500 text-cream'
+                                : 'bg-coffee-700 border-coffee-700 text-cream'
+                              : 'bg-white border-coffee-200 text-coffee-600 hover:border-coffee-400'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs text-coffee-700 mb-1">Tags</label>
+                    <TagSelector
+                      tags={quickForm.tags}
+                      onChange={(tags) => setQuickForm({ ...quickForm, tags })}
+                      options={TAG_OPTIONS}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs text-coffee-700 mb-1">Notas</label>
+                    <textarea
+                      value={quickForm.notas}
+                      onChange={(e) => setQuickForm({ ...quickForm, notas: e.target.value })}
+                      rows={2}
+                      className="w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="px-3 py-1.5 rounded-lg bg-[var(--color-primary)] text-cream text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
+                    >
+                      {saving ? 'Guardando...' : 'Guardar cita'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setQuickAddOpen(false); setQuickForm(emptyQuickForm) }}
+                      className="px-3 py-1.5 rounded-lg border border-coffee-300 text-coffee-700 text-xs"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
               )}
             </div>
           )}

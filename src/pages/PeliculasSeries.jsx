@@ -67,6 +67,7 @@ export default function PeliculasSeries() {
       notas: item.notas || '',
     })
     setEditingId(item.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function toggleVisto(item) {

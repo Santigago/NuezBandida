@@ -66,6 +66,7 @@ export default function Citas() {
       tipo: item.tipo || 'sin_sexo',
     })
     setEditingId(item.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function toggleTipo(item) {
