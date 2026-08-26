@@ -8,6 +8,7 @@ const LINKS = [
   { to: '/lugares', label: 'Lugares' },
   { to: '/recetas', label: 'Recetas' },
   { to: '/moteles', label: 'Moteles' },
+  { to: '/intimo', label: 'Intimo' },
   { to: '/peliculas-y-series', label: 'Películas y Series' },
 ]
 

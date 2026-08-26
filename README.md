@@ -70,13 +70,13 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [ ] Notificaciones al agregar algo al tablero
 - [x] Vista de calendario de citas pasadas
 - [ ] Exportar "anuario" en PDF al fin de año
-- [ ] Agregar diferenciación en el calendario para citas normales y citas con sexo
-- [ ] Agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
+- [x] Agregar diferenciación en el calendario para citas normales y citas con sexo
+- [x] Agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
 - [ ] Agregar boton para ir a jellyfin en la seccion de peliculas y series
 - [ ] Agregar redireccion a jellifyn si la pelicual o serie existe\
 - [ ] Agregar seccion a solicitud de agregar a jellyfin si no existe la pelicula o serie
 - [ ] Agregar funcion para anadir reacciones a posts del tablero
-- [ ] Agregar tab para rating de estrellas de posiiones sexuales
+- [x] Agregar tab para rating de estrellas de posiiones sexuales
 - [ ] Cambiar comportamiento de boton de editar cartas para subir hasta arriba de la pagina
 
 ---

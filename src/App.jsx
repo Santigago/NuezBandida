@@ -8,13 +8,14 @@ import Calendario from './pages/Calendario.jsx'
 import Lugares from './pages/Lugares.jsx'
 import Recetas from './pages/Recetas.jsx'
 import Moteles from './pages/Moteles.jsx'
+import Intimo from './pages/Intimo.jsx'
 import PeliculasSeries from './pages/PeliculasSeries.jsx'
 import Login from './pages/Login.jsx'
 import Salir from './pages/Salir.jsx'
 
 export default function App() {
   const location = useLocation()
-  const isMotelTheme = location.pathname.startsWith('/moteles')
+  const isMotelTheme = location.pathname.startsWith('/moteles') || location.pathname.startsWith('/intimo')
   const isLoginPage = location.pathname === '/login'
   const [visible, setVisible] = useState(false)
 
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/lugares" element={<ProtectedRoute><Lugares /></ProtectedRoute>} />
           <Route path="/recetas" element={<ProtectedRoute><Recetas /></ProtectedRoute>} />
           <Route path="/moteles" element={<ProtectedRoute><Moteles /></ProtectedRoute>} />
+          <Route path="/intimo" element={<ProtectedRoute><Intimo /></ProtectedRoute>} />
           <Route path="/peliculas-y-series" element={<ProtectedRoute><PeliculasSeries /></ProtectedRoute>} />
         </Routes>
       </main>
