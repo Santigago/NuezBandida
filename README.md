@@ -71,7 +71,10 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [ ] Vista de calendario de citas pasadas
 - [ ] Exportar "anuario" en PDF al fin de año
 - [ ] Agregar diferenciación en el calendario para citas normales y citas con sexo
-- [ ] agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
+- [ ] Agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
+- [ ] Agregar boton para ir a jellyfin en la seccion de peliculas y series
+- [ ] Agregar redireccion a jellifyn si la pelicual o serie existe\
+- [ ] Agregar seccion a solicitud de agregar a jellyfin si no existe la pelicula o serie
 
 ---
 
