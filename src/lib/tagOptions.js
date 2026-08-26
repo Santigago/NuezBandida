@@ -9,4 +9,6 @@ export const TAG_OPTIONS = [
   'mall',
   'naturaleza',
   'cultura',
+  'columpio',
+  'iglesia',
 ]

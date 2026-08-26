@@ -9,7 +9,12 @@ import { TAG_OPTIONS } from '../lib/tagOptions.js'
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
 
-const emptyForm = { lugar: '', fecha: '', tags: [], notas: '' }
+const emptyForm = { lugar: '', fecha: '', tags: [], notas: '', tipo: 'sin_sexo' }
+
+const TIPO_OPTIONS = [
+  { value: 'sin_sexo', label: 'Cita normal' },
+  { value: 'con_sexo', label: 'Cita íntima' },
+]
 
 export default function Citas() {
   const { items, loading, error, addItem, updateItem, deleteItem } = useSupabaseTable('citas')
@@ -17,6 +22,7 @@ export default function Citas() {
   const [editingId, setEditingId] = useState(null)
   const [search, setSearch] = useState('')
   const [tagFilter, setTagFilter] = useState('')
+  const [tipoFilter, setTipoFilter] = useState('')
   const [saving, setSaving] = useState(false)
 
   const allTags = useMemo(() => {
@@ -28,8 +34,11 @@ export default function Citas() {
   const filtered = items.filter((i) => {
     const matchesSearch = i.lugar?.toLowerCase().includes(search.toLowerCase())
     const matchesTag = !tagFilter || (i.tags || []).includes(tagFilter)
-    return matchesSearch && matchesTag
+    const matchesTipo = !tipoFilter || i.tipo === tipoFilter
+    return matchesSearch && matchesTag && matchesTipo
   })
+
+  const activeFilterCount = (tagFilter ? 1 : 0) + (tipoFilter ? 1 : 0)
 
   function resetForm() {
     setForm(emptyForm)
@@ -49,8 +58,18 @@ export default function Citas() {
   }
 
   function startEdit(item) {
-    setForm({ lugar: item.lugar, fecha: item.fecha || '', tags: item.tags || [], notas: item.notas || '' })
+    setForm({
+      lugar: item.lugar,
+      fecha: item.fecha || '',
+      tags: item.tags || [],
+      notas: item.notas || '',
+      tipo: item.tipo || 'sin_sexo',
+    })
     setEditingId(item.id)
+  }
+
+  async function toggleTipo(item) {
+    await updateItem(item.id, { tipo: item.tipo === 'con_sexo' ? 'sin_sexo' : 'con_sexo' })
   }
 
   return (
@@ -80,6 +99,28 @@ export default function Citas() {
               onChange={(e) => setForm({ ...form, fecha: e.target.value })}
               className={inputClass}
             />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm text-coffee-700 mb-1">Tipo de cita</label>
+          <div className="flex gap-3">
+            {TIPO_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setForm({ ...form, tipo: opt.value })}
+                className={`px-4 py-2 rounded-lg text-sm border transition-colors ${
+                  form.tipo === opt.value
+                    ? opt.value === 'con_sexo'
+                      ? 'bg-burgundy-500 border-burgundy-500 text-cream'
+                      : 'bg-coffee-700 border-coffee-700 text-cream'
+                    : 'bg-white border-coffee-200 text-coffee-600 hover:border-coffee-400'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -122,7 +163,13 @@ export default function Citas() {
           onChange={(e) => setSearch(e.target.value)}
           className={`${inputClass} sm:max-w-xs`}
         />
-        <FilterMenu activeCount={tagFilter ? 1 : 0}>
+        <FilterMenu activeCount={activeFilterCount}>
+          <FilterChipGroup
+            title="Tipo de cita"
+            options={TIPO_OPTIONS}
+            value={tipoFilter}
+            onChange={setTipoFilter}
+          />
           <FilterChipGroup
             title="Tags"
             options={allTags.map((t) => ({ value: t, label: t }))}
@@ -151,6 +198,19 @@ export default function Citas() {
                 </div>
               </div>
               {item.fecha && <p className="text-xs text-coffee-400 mt-1">{item.fecha}</p>}
+
+              {/* Tipo badge */}
+              <button
+                onClick={() => toggleTipo(item)}
+                className={`mt-2 text-xs px-2 py-0.5 rounded-full ${
+                  item.tipo === 'con_sexo'
+                    ? 'bg-burgundy-500 text-cream'
+                    : 'bg-coffee-500 text-cream'
+                }`}
+              >
+                {item.tipo === 'con_sexo' ? '♥ Cita íntima' : '♥ Cita normal'}
+              </button>
+
               {item.notas && <p className="text-sm text-coffee-600 mt-2">{item.notas}</p>}
               {item.tags?.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
