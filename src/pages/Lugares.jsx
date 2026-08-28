@@ -4,12 +4,13 @@ import TagSelector from '../components/TagSelector.jsx'
 import FilterMenu from '../components/FilterMenu.jsx'
 import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import MapEmbed from '../components/MapEmbed.jsx'
 import { TAG_OPTIONS } from '../lib/tagOptions.js'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
 
-const emptyForm = { nombre: '', tags: [], estado: 'por_visitar', notas: '' }
+const emptyForm = { nombre: '', ubicacion: '', tags: [], estado: 'por_visitar', notas: '' }
 
 const ESTADO_OPTIONS = [
   { value: 'por_visitar', label: 'Por visitar' },
@@ -24,6 +25,7 @@ export default function Lugares() {
   const [tagFilter, setTagFilter] = useState('')
   const [estadoFilter, setEstadoFilter] = useState('')
   const [saving, setSaving] = useState(false)
+  const [openMaps, setOpenMaps] = useState({})
 
   const allTags = useMemo(() => {
     const set = new Set()
@@ -58,13 +60,23 @@ export default function Lugares() {
   }
 
   function startEdit(item) {
-    setForm({ nombre: item.nombre, tags: item.tags || [], estado: item.estado, notas: item.notas || '' })
+    setForm({
+      nombre: item.nombre,
+      ubicacion: item.ubicacion || '',
+      tags: item.tags || [],
+      estado: item.estado,
+      notas: item.notas || '',
+    })
     setEditingId(item.id)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   async function toggleEstado(item) {
     await updateItem(item.id, { estado: item.estado === 'visitado' ? 'por_visitar' : 'visitado' })
+  }
+
+  function toggleMap(id) {
+    setOpenMaps((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
   return (
@@ -97,6 +109,17 @@ export default function Lugares() {
               <option value="visitado">Visitado</option>
             </select>
           </div>
+        </div>
+
+        <div>
+          <label className="block text-sm text-coffee-700 mb-1">Ubicación</label>
+          <input
+            type="text"
+            placeholder="Dirección o nombre del lugar (ej: Parque Bicentenario, Vitacura)"
+            value={form.ubicacion}
+            onChange={(e) => setForm({ ...form, ubicacion: e.target.value })}
+            className={inputClass}
+          />
         </div>
 
         <div>
@@ -181,6 +204,17 @@ export default function Lugares() {
                   {item.tags.map((t) => (
                     <span key={t} className="text-xs bg-coffee-100 text-coffee-600 px-2 py-0.5 rounded-full">{t}</span>
                   ))}
+                </div>
+              )}
+              {item.ubicacion && (
+                <div className="mt-2">
+                  <button
+                    onClick={() => toggleMap(item.id)}
+                    className="text-xs text-[var(--color-primary)] hover:underline"
+                  >
+                    {openMaps[item.id] ? 'Ocultar mapa' : '📍 Ver mapa'}
+                  </button>
+                  {openMaps[item.id] && <MapEmbed query={item.ubicacion} />}
                 </div>
               )}
               <p className="text-xs text-coffee-300 mt-2">— {item.creado_por}</p>

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import StarRating from '../components/StarRating.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import MapEmbed from '../components/MapEmbed.jsx'
 
 const inputClass =
   'w-full px-3 py-2 rounded-lg border border-[var(--color-primary-light)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
 
-const emptyForm = { nombre: '', calificacion: 0, notas: '' }
+const emptyForm = { nombre: '', ubicacion: '', calificacion: 0, notas: '' }
 
 export default function Moteles() {
   const { items, loading, error, addItem, updateItem, deleteItem } = useSupabaseTable('moteles')
@@ -14,6 +15,7 @@ export default function Moteles() {
   const [editingId, setEditingId] = useState(null)
   const [search, setSearch] = useState('')
   const [saving, setSaving] = useState(false)
+  const [openMaps, setOpenMaps] = useState({})
 
   const filtered = items.filter((i) => i.nombre?.toLowerCase().includes(search.toLowerCase()))
 
@@ -35,9 +37,18 @@ export default function Moteles() {
   }
 
   function startEdit(item) {
-    setForm({ nombre: item.nombre, calificacion: item.calificacion || 0, notas: item.notas || '' })
+    setForm({
+      nombre: item.nombre,
+      ubicacion: item.ubicacion || '',
+      calificacion: item.calificacion || 0,
+      notas: item.notas || '',
+    })
     setEditingId(item.id)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  function toggleMap(id) {
+    setOpenMaps((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
   return (
@@ -53,6 +64,16 @@ export default function Moteles() {
             required
             value={form.nombre}
             onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className="block text-sm text-coffee-700 mb-1">Ubicación</label>
+          <input
+            type="text"
+            placeholder="Dirección o nombre del motel"
+            value={form.ubicacion}
+            onChange={(e) => setForm({ ...form, ubicacion: e.target.value })}
             className={inputClass}
           />
         </div>
@@ -115,6 +136,17 @@ export default function Moteles() {
                 <StarRating value={item.calificacion || 0} readOnly />
               </div>
               {item.notas && <p className="text-sm text-coffee-600 mt-2">{item.notas}</p>}
+              {item.ubicacion && (
+                <div className="mt-2">
+                  <button
+                    onClick={() => toggleMap(item.id)}
+                    className="text-xs text-[var(--color-primary)] hover:underline"
+                  >
+                    {openMaps[item.id] ? 'Ocultar mapa' : '📍 Ver mapa'}
+                  </button>
+                  {openMaps[item.id] && <MapEmbed query={item.ubicacion} />}
+                </div>
+              )}
               <p className="text-xs text-coffee-300 mt-2">— {item.creado_por}</p>
             </div>
           ))}
