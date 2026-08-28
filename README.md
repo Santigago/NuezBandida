@@ -66,7 +66,7 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 ## Fase 8 — Extensiones futuras (opcional, cuando quieran)
 - [x] Recomendaciones más inteligentes
 - [x] Agregar boton de filtro para busqueda de lugares, citas, recetas y peliculas/series
-- [ ] Mapa embebido para ubicaciones
+- [x] Mapa embebido para ubicaciones
 - [ ] Notificaciones al agregar algo al tablero
 - [x] Vista de calendario de citas pasadas
 - [ ] Exportar "anuario" en PDF al fin de año
