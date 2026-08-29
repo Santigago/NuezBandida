@@ -138,7 +138,7 @@ export default function Tablero() {
       {!formOpen ? (
         <button
           onClick={() => setFormOpen(true)}
-          className="w-full py-2.5 rounded-xl border-2 border-dashed border-coffee-300 text-coffee-500 text-sm hover:border-coffee-400 hover:text-coffee-700 transition-colors"
+          className="w-full py-2.5 rounded-xl bg-[var(--color-primary)] text-cream text-sm font-medium hover:opacity-90 transition-opacity shadow-sm"
         >
           + Publicar en el tablero
         </button>

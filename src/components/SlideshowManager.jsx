@@ -23,8 +23,11 @@ export default function SlideshowManager() {
 
   return (
     <div className="mt-4">
-      <button onClick={() => setOpen((o) => !o)} className="text-sm text-coffee-500 hover:text-[var(--color-primary)] underline">
-        {open ? 'Ocultar administrador de fotos' : 'Agregar o quitar fotos del slideshow'}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="text-sm px-3 py-1.5 rounded-lg bg-[var(--color-primary)] text-cream hover:opacity-90 transition-opacity shadow-sm"
+      >
+        {open ? 'Ocultar administrador de fotos' : '+ Agregar o quitar fotos'}
       </button>
 
       {open && (

@@ -114,7 +114,7 @@ function Recomendaciones() {
       </div>
       <button
         onClick={() => setSeed((s) => s + 1)}
-        className="px-4 py-2 rounded-lg border border-coffee-300 text-coffee-700 text-sm hover:bg-coffee-50"
+        className="px-4 py-2 rounded-lg bg-[var(--color-primary)] text-cream text-sm font-medium hover:opacity-90 transition-opacity shadow-sm"
       >
         Ver otras opciones
       </button>
