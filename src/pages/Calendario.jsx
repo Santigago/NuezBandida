@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 import TagSelector from '../components/TagSelector.jsx'
+import AnuarioGenerator from '../components/AnuarioGenerator.jsx'
 import { TAG_OPTIONS } from '../lib/tagOptions.js'
 import { mapsSearchUrl } from '../lib/googleMaps.js'
 
@@ -101,7 +102,9 @@ export default function Calendario() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <h1 className="text-3xl text-coffee-800 mb-2">Calendario</h1>
-      <p className="text-coffee-600 mb-6">Todas nuestras citas en el tiempo.</p>
+      <p className="text-coffee-600 mb-4">Todas nuestras citas en el tiempo.</p>
+
+      <AnuarioGenerator />
 
       {loading ? (
         <LoadingSpinner />

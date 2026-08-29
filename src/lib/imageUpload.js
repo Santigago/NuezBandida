@@ -62,3 +62,22 @@ export async function deleteImageByUrl(url) {
   const path = url.slice(idx + marker.length)
   await supabase.storage.from('app-images').remove([path])
 }
+
+// Crea una copia independiente de una imagen en otra carpeta del bucket.
+// Útil para "archivar" una foto (ej: recuerdos del tablero) de forma que
+// borrar o reemplazar el original no afecte a la copia archivada.
+export async function copyImage(url, folder) {
+  const marker = '/app-images/'
+  const idx = url.indexOf(marker)
+  if (idx === -1) return url
+
+  const oldPath = url.slice(idx + marker.length)
+  const ext = oldPath.split('.').pop() || 'jpg'
+  const newPath = `${folder}/${crypto.randomUUID()}.${ext}`
+
+  const { error } = await supabase.storage.from('app-images').copy(oldPath, newPath)
+  if (error) throw error
+
+  const { data } = supabase.storage.from('app-images').getPublicUrl(newPath)
+  return data.publicUrl
+}

@@ -69,7 +69,7 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Mapa embebido para ubicaciones
 - [ ] Notificaciones al agregar algo al tablero
 - [x] Vista de calendario de citas pasadas
-- [ ] Exportar "anuario" en PDF al fin de año
+- [x] Exportar "anuario" en PDF al fin de año
 - [x] Agregar diferenciación en el calendario para citas normales y citas con sexo
 - [x] Agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
 - [x] Agregar boton para ir a jellyfin en la seccion de peliculas y series

@@ -1,6 +1,6 @@
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import { supabase } from '../lib/supabaseClient.js'
-import { deleteImageByUrl } from '../lib/imageUpload.js'
+import { deleteImageByUrl, copyImage } from '../lib/imageUpload.js'
 import { useState, useEffect } from 'react'
 import ImageUploader from './ImageUploader.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
@@ -43,6 +43,14 @@ export default function Tablero() {
       if (previous?.foto_url && previous.foto_url !== form.foto_url) {
         deleteImageByUrl(previous.foto_url).catch(() => {})
       }
+
+      // Archivar una copia permanente para el anuario de fin de año,
+      // independiente del post en vivo (que se reemplaza cada vez que alguien publica).
+      const archivedUrl = form.foto_url ? await copyImage(form.foto_url, 'recuerdos') : null
+      const { error: archiveError } = await supabase
+        .from('recuerdos')
+        .insert([{ texto: form.texto || null, foto_url: archivedUrl, creado_por }])
+      if (archiveError) throw archiveError
 
       setForm(emptyForm)
       setFormOpen(false)
