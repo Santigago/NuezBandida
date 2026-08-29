@@ -3,6 +3,7 @@ import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 import TagSelector from '../components/TagSelector.jsx'
 import { TAG_OPTIONS } from '../lib/tagOptions.js'
+import { mapsSearchUrl } from '../lib/googleMaps.js'
 
 function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate()
@@ -194,7 +195,14 @@ export default function Calendario() {
                   {selectedCitas.map((c) => (
                     <div key={c.id} className="bg-white rounded-xl p-3 border border-coffee-100 shadow-sm">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-coffee-800 text-sm">{c.lugar}</p>
+                        <a
+                          href={mapsSearchUrl(c.lugar)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-medium text-coffee-800 text-sm hover:text-[var(--color-primary)] hover:underline flex items-center gap-1"
+                        >
+                          <span>📍</span> {c.lugar}
+                        </a>
                         <span
                           className={`text-xs px-2 py-0.5 rounded-full ${
                             c.tipo === 'con_sexo'

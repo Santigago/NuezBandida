@@ -5,6 +5,7 @@ import FilterMenu from '../components/FilterMenu.jsx'
 import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 import MapEmbed from '../components/MapEmbed.jsx'
+import { mapsSearchUrl } from '../lib/googleMaps.js'
 import { TAG_OPTIONS } from '../lib/tagOptions.js'
 
 const inputClass =
@@ -184,7 +185,14 @@ export default function Lugares() {
           {filtered.map((item) => (
             <div key={item.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
               <div className="flex justify-between items-start">
-                <h3 className="font-medium text-coffee-800">{item.nombre}</h3>
+                <a
+                  href={mapsSearchUrl(item.ubicacion || item.nombre)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-coffee-800 hover:text-[var(--color-primary)] hover:underline flex items-center gap-1"
+                >
+                  <span>📍</span> {item.nombre}
+                </a>
                 <div className="flex gap-2 text-sm">
                   <button onClick={() => startEdit(item)} className="text-coffee-500 hover:text-[var(--color-primary)]">Editar</button>
                   <button onClick={() => deleteItem(item.id)} className="text-coffee-500 hover:text-burgundy-500">Eliminar</button>
@@ -212,7 +220,7 @@ export default function Lugares() {
                     onClick={() => toggleMap(item.id)}
                     className="text-xs text-[var(--color-primary)] hover:underline"
                   >
-                    {openMaps[item.id] ? 'Ocultar mapa' : '📍 Ver mapa'}
+                    {openMaps[item.id] ? 'Ocultar mapa' : '📍 Ver mapa aquí'}
                   </button>
                   {openMaps[item.id] && <MapEmbed query={item.ubicacion} />}
                 </div>

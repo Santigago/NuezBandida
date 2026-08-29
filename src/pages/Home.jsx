@@ -6,6 +6,7 @@ import SolicitudesWidget from '../components/SolicitudesWidget.jsx'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import { useRandomBackground } from '../hooks/useRandomBackground.js'
 import { useIsAdmin } from '../hooks/useIsAdmin.js'
+import { mapsSearchUrl } from '../lib/googleMaps.js'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 const POOL_SIZE = 6
@@ -97,8 +98,16 @@ function Recomendaciones() {
     <div>
       <div className="grid sm:grid-cols-3 gap-4 mb-4">
         {sugeridos.map(({ lugar, reason }) => (
-          <div key={lugar.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
-            <h3 className="font-medium text-coffee-800">{lugar.nombre}</h3>
+          <a
+            key={lugar.id}
+            href={mapsSearchUrl(lugar.ubicacion || lugar.nombre)}
+            target="_blank"
+            rel="noreferrer"
+            className="card-hover block bg-white rounded-xl p-4 border border-coffee-100 shadow-sm hover:border-[var(--color-primary-light)]"
+          >
+            <h3 className="font-medium text-coffee-800 hover:text-[var(--color-primary)] flex items-center gap-1">
+              <span>📍</span> {lugar.nombre}
+            </h3>
             {reason && <p className="text-xs text-[var(--color-primary)] mt-1">{reason}</p>}
             {lugar.tags?.length > 0 && (
               <div className="flex flex-wrap gap-1 mt-2">
@@ -109,7 +118,7 @@ function Recomendaciones() {
                 ))}
               </div>
             )}
-          </div>
+          </a>
         ))}
       </div>
       <button
