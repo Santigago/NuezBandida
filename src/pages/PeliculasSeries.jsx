@@ -240,7 +240,14 @@ export default function PeliculasSeries() {
                   </h3>
                   <div className="flex gap-2 text-sm flex-shrink-0">
                     <button onClick={() => startEdit(item)} className="text-coffee-500 hover:text-[var(--color-primary)]">Editar</button>
-                    <button onClick={() => deleteItem(item.id)} className="text-coffee-500 hover:text-burgundy-500">Eliminar</button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`¿Eliminar "${item.titulo}"?`)) deleteItem(item.id)
+                      }}
+                      className="text-coffee-500 hover:text-burgundy-500"
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 mt-2">

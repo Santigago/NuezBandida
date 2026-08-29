@@ -195,7 +195,14 @@ export default function Lugares() {
                 </a>
                 <div className="flex gap-2 text-sm">
                   <button onClick={() => startEdit(item)} className="text-coffee-500 hover:text-[var(--color-primary)]">Editar</button>
-                  <button onClick={() => deleteItem(item.id)} className="text-coffee-500 hover:text-burgundy-500">Eliminar</button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`¿Eliminar "${item.nombre}"?`)) deleteItem(item.id)
+                    }}
+                    className="text-coffee-500 hover:text-burgundy-500"
+                  >
+                    Eliminar
+                  </button>
                 </div>
               </div>
               <button

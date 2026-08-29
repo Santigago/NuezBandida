@@ -134,7 +134,12 @@ export default function Tablero() {
 
               <div className="flex justify-between items-center mt-3">
                 <p className="text-xs text-coffee-300">— {post.creado_por}</p>
-                <button onClick={() => handleDelete(post)} className="text-xs text-coffee-400 hover:text-burgundy-500">
+                <button
+                  onClick={() => {
+                    if (window.confirm('¿Eliminar esta publicación del tablero?')) handleDelete(post)
+                  }}
+                  className="text-xs text-coffee-400 hover:text-burgundy-500"
+                >
                   Eliminar
                 </button>
               </div>

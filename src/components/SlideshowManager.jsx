@@ -50,7 +50,9 @@ export default function SlideshowManager() {
                 <div key={foto.id} className="relative group">
                   <img src={foto.url} alt={foto.descripcion || ''} className="w-full h-20 object-cover rounded-lg" />
                   <button
-                    onClick={() => handleDelete(foto)}
+                    onClick={() => {
+                      if (window.confirm('¿Eliminar esta foto del slideshow?')) handleDelete(foto)
+                    }}
                     className="absolute top-1 right-1 bg-burgundy-500 text-cream text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     aria-label="Eliminar foto"
                   >

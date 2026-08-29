@@ -1,0 +1,17 @@
+export const JUEGO_TAG_OPTIONS = [
+    'restriccion fisica',
+    'temperatura',
+    'restriccion de tiempo',
+    'sabores',
+    'masajes',
+    'cegera',
+    'bdsm',
+    'fetiches',
+    'juguetes',
+    'juegos de rol',
+    'juegos de mesa',
+    'juegos de cartas',
+    'juegos de dados',
+    'juegos de preguntas',
+    'juegos de retos',
+]
