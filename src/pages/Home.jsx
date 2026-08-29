@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import Slideshow from '../components/Slideshow.jsx'
 import SlideshowManager from '../components/SlideshowManager.jsx'
 import Tablero from '../components/Tablero.jsx'
+import SolicitudesWidget from '../components/SolicitudesWidget.jsx'
 import { useSupabaseTable } from '../hooks/useSupabaseTable.js'
 import { useRandomBackground } from '../hooks/useRandomBackground.js'
 import { useIsAdmin } from '../hooks/useIsAdmin.js'
@@ -133,6 +134,8 @@ export default function Home() {
           backgroundImage: `linear-gradient(rgba(247,239,228,0.35), rgba(247,239,228,0.35)), url(${background})`,
         }}
       />
+
+      {isAdmin && <SolicitudesWidget />}
 
       <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
         <section>

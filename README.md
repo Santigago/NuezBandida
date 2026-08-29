@@ -72,9 +72,9 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [ ] Exportar "anuario" en PDF al fin de año
 - [x] Agregar diferenciación en el calendario para citas normales y citas con sexo
 - [x] Agregar lista de productos y juguetes sexuales con rating de 1 a 5 estrellas para cada uno
-- [ ] Agregar boton para ir a jellyfin en la seccion de peliculas y series
-- [ ] Agregar redireccion a jellifyn si la pelicual o serie existe\
-- [ ] Agregar seccion a solicitud de agregar a jellyfin si no existe la pelicula o serie
+- [x] Agregar boton para ir a jellyfin en la seccion de peliculas y series
+- [x] Agregar redireccion a jellifyn si la pelicual o serie existe
+- [x] Agregar seccion a solicitud de agregar a jellyfin si no existe la pelicula o serie
 - [x] Agregar funcion para anadir reacciones a posts del tablero
 - [x] Agregar tab para rating de estrellas de posiiones sexuales
 - [x] Cambiar comportamiento de boton de editar cartas para subir hasta arriba de la pagina

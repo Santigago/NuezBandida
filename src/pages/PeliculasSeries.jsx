@@ -5,7 +5,9 @@ import FilterMenu from '../components/FilterMenu.jsx'
 import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 import MovieSearch from '../components/MovieSearch.jsx'
+import JellyfinStatus from '../components/JellyfinStatus.jsx'
 import { posterUrl } from '../lib/tmdb.js'
+import { jellyfinHomeUrl } from '../lib/jellyfin.js'
 import { PELICULA_TAG_OPTIONS } from '../lib/tagOptionsPeliculas.js'
 
 const inputClass =
@@ -88,6 +90,10 @@ export default function PeliculasSeries() {
     await updateItem(item.id, { visto: !item.visto })
   }
 
+  async function markSolicitado(item) {
+    await updateItem(item.id, { jellyfin_solicitado: true })
+  }
+
   function handleTmdbSelect(result) {
     setForm((f) => ({
       ...f,
@@ -101,7 +107,17 @@ export default function PeliculasSeries() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
-      <h1 className="text-3xl text-coffee-800 mb-2">Películas y Series</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <h1 className="text-3xl text-coffee-800">Películas y Series</h1>
+        <a
+          href={jellyfinHomeUrl()}
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm px-3 py-1.5 rounded-lg border border-coffee-300 text-coffee-700 hover:bg-coffee-50"
+        >
+          Abrir Jellyfin ↗
+        </a>
+      </div>
       <p className="text-coffee-600 mb-6">Lo que hemos visto y lo que queremos ver.</p>
 
       <form onSubmit={handleSubmit} className="bg-coffee-50 rounded-2xl p-6 mb-8 space-y-4">
@@ -248,6 +264,14 @@ export default function PeliculasSeries() {
                   </div>
                 )}
                 {item.notas && <p className="text-sm text-coffee-600 mt-2">{item.notas}</p>}
+                <div className="mt-2">
+                  <JellyfinStatus
+                    titulo={item.titulo}
+                    tipo={item.tipo}
+                    solicitado={item.jellyfin_solicitado}
+                    onMarkSolicitado={() => markSolicitado(item)}
+                  />
+                </div>
                 <p className="text-xs text-coffee-300 mt-2">— {item.creado_por}</p>
               </div>
             </div>
