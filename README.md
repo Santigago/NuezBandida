@@ -79,6 +79,7 @@ conforme avanzamos, y así vamos llevando el control en GitHub.
 - [x] Agregar tab para rating de estrellas de posiiones sexuales
 - [x] Cambiar comportamiento de boton de editar cartas para subir hasta arriba de la pagina
 - [x] Agregar boton a calendario para anadir citas en dias donde no haya
+- [ ] Arreglar vista de tarjetas de recetas para mostrar nombre de receya como link y thumbnail para el video en vez de mostrar el link
 
 ---
 
