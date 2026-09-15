@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import NuezCorazonIcon from './NuezCorazonIcon.jsx'
 
 const LINKS = [
   { to: '/', label: 'Inicio' },
@@ -24,8 +25,9 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-gradient-to-b from-[var(--color-primary)] via-[var(--color-primary)]/90 to-transparent pb-8 -mb-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-3 items-center h-16">
-          <NavLink to="/" className="font-display text-2xl text-cream tracking-wide justify-self-start">
-            NuezBandida
+          <NavLink to="/" className="font-display text-2xl text-cream tracking-wide justify-self-start flex items-center gap-2.5 group">
+            <NuezCorazonIcon className="w-8 h-8 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" />
+            <span>NuezBandida</span>
           </NavLink>
 
           {/* Nav de escritorio, centrado */}

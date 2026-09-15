@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
+import NuezCorazonIcon from '../components/NuezCorazonIcon.jsx'
 
 export default function Login() {
   const { login } = useAuth()
@@ -32,8 +33,11 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm bg-cream rounded-2xl p-8 shadow-lg"
       >
-        <h1 className="text-2xl text-coffee-800 mb-1">NuezBandida</h1>
-        <p className="text-coffee-500 mb-6 text-sm">Inicia sesión para entrar</p>
+        <div className="flex flex-col items-center text-center mb-6">
+          <NuezCorazonIcon className="w-16 h-16 mb-2 drop-shadow-md" />
+          <h1 className="text-2xl text-coffee-800 mb-1 font-display">NuezBandida</h1>
+          <p className="text-coffee-500 text-sm">Inicia sesión para entrar</p>
+        </div>
 
         <label className="block text-sm text-coffee-700 mb-1">Correo</label>
         <input
