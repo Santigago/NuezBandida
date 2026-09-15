@@ -41,18 +41,24 @@ export default function PeliculasSeries() {
   const [search, setSearch] = useState('')
   const [tipoFilter, setTipoFilter] = useState('')
   const [vistoFilter, setVistoFilter] = useState('')
-  const [tagFilter, setTagFilter] = useState('')
+  const [tagFilter, setTagFilter] = useState([])
+  const [tagMatchMode, setTagMatchMode] = useState('or')
   const [saving, setSaving] = useState(false)
 
   const filtered = items.filter((i) => {
     const matchesSearch = i.titulo?.toLowerCase().includes(search.toLowerCase())
     const matchesTipo = !tipoFilter || i.tipo === tipoFilter
     const matchesVisto = !vistoFilter || (vistoFilter === 'visto' ? i.visto : !i.visto)
-    const matchesTag = !tagFilter || (i.tags || []).includes(tagFilter)
+    const itemTags = i.tags || []
+    const matchesTag =
+      tagFilter.length === 0 ||
+      (tagMatchMode === 'and'
+        ? tagFilter.every((t) => itemTags.includes(t))
+        : tagFilter.some((t) => itemTags.includes(t)))
     return matchesSearch && matchesTipo && matchesVisto && matchesTag
   })
 
-  const activeFilterCount = (tipoFilter ? 1 : 0) + (vistoFilter ? 1 : 0) + (tagFilter ? 1 : 0)
+  const activeFilterCount = (tipoFilter ? 1 : 0) + (vistoFilter ? 1 : 0) + tagFilter.length
 
   function resetForm() {
     setForm(emptyForm)
@@ -215,6 +221,8 @@ export default function PeliculasSeries() {
             options={PELICULA_TAG_OPTIONS.map((t) => ({ value: t, label: t }))}
             value={tagFilter}
             onChange={setTagFilter}
+            matchMode={tagMatchMode}
+            onMatchModeChange={setTagMatchMode}
           />
         </FilterMenu>
       </div>
@@ -227,7 +235,7 @@ export default function PeliculasSeries() {
           Nada por aquí todavía.
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4 items-start">
           {filtered.map((item) => (
             <div key={item.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm flex gap-3">
               {item.poster_url && (

@@ -337,12 +337,18 @@ function Juegos() {
   const [form, setForm] = useState(emptyJuego)
   const [editingId, setEditingId] = useState(null)
   const [search, setSearch] = useState('')
-  const [tagFilter, setTagFilter] = useState('')
+  const [tagFilter, setTagFilter] = useState([])
+  const [tagMatchMode, setTagMatchMode] = useState('or')
   const [saving, setSaving] = useState(false)
 
   const filtered = items.filter((i) => {
     const matchesSearch = i.nombre?.toLowerCase().includes(search.toLowerCase())
-    const matchesTag = !tagFilter || (i.tags || []).includes(tagFilter)
+    const itemTags = i.tags || []
+    const matchesTag =
+      tagFilter.length === 0 ||
+      (tagMatchMode === 'and'
+        ? tagFilter.every((t) => itemTags.includes(t))
+        : tagFilter.some((t) => itemTags.includes(t)))
     return matchesSearch && matchesTag
   })
 
@@ -425,12 +431,14 @@ function Juegos() {
           onChange={(e) => setSearch(e.target.value)}
           className={`${inputClass} sm:max-w-xs`}
         />
-        <FilterMenu activeCount={tagFilter ? 1 : 0}>
+        <FilterMenu activeCount={tagFilter.length}>
           <FilterChipGroup
             title="Tags"
             options={JUEGO_TAG_OPTIONS.map((t) => ({ value: t, label: t }))}
             value={tagFilter}
             onChange={setTagFilter}
+            matchMode={tagMatchMode}
+            onMatchModeChange={setTagMatchMode}
           />
         </FilterMenu>
       </div>
@@ -443,7 +451,7 @@ function Juegos() {
           No hay juegos todavía.
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4 items-start">
           {filtered.map((item) => (
             <div key={item.id} className="card-hover bg-white rounded-xl p-4 border border-burgundy-100 shadow-sm">
               <div className="flex justify-between items-start">

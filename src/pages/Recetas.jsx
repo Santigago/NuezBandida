@@ -4,6 +4,7 @@ import TagSelector from '../components/TagSelector.jsx'
 import FilterMenu from '../components/FilterMenu.jsx'
 import FilterChipGroup from '../components/FilterChipGroup.jsx'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import InstagramEmbed from '../components/InstagramEmbed.jsx'
 import { RECETA_TAG_OPTIONS } from '../lib/tagOptionsRecetas.js'
 
 const inputClass =
@@ -16,12 +17,18 @@ export default function Recetas() {
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
   const [search, setSearch] = useState('')
-  const [tagFilter, setTagFilter] = useState('')
+  const [tagFilter, setTagFilter] = useState([])
+  const [tagMatchMode, setTagMatchMode] = useState('or')
   const [saving, setSaving] = useState(false)
 
   const filtered = items.filter((i) => {
     const matchesSearch = i.nombre?.toLowerCase().includes(search.toLowerCase())
-    const matchesTag = !tagFilter || (i.tags || []).includes(tagFilter)
+    const itemTags = i.tags || []
+    const matchesTag =
+      tagFilter.length === 0 ||
+      (tagMatchMode === 'and'
+        ? tagFilter.every((t) => itemTags.includes(t))
+        : tagFilter.some((t) => itemTags.includes(t)))
     return matchesSearch && matchesTag
   })
 
@@ -103,12 +110,14 @@ export default function Recetas() {
           onChange={(e) => setSearch(e.target.value)}
           className={`${inputClass} sm:max-w-xs`}
         />
-        <FilterMenu activeCount={tagFilter ? 1 : 0}>
+        <FilterMenu activeCount={tagFilter.length}>
           <FilterChipGroup
             title="Tags"
             options={RECETA_TAG_OPTIONS.map((t) => ({ value: t, label: t }))}
             value={tagFilter}
             onChange={setTagFilter}
+            matchMode={tagMatchMode}
+            onMatchModeChange={setTagMatchMode}
           />
         </FilterMenu>
       </div>
@@ -121,31 +130,44 @@ export default function Recetas() {
           No hay recetas todavía.
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-4 items-start">
           {filtered.map((item) => (
-            <div key={item.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
-              <div className="flex justify-between items-start">
-                
-                  href={item.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-[var(--color-primary)] hover:underline"
-                <a>
-                  {item.nombre}
-                </a>
-                <div className="flex gap-2 text-sm">
-                  <button onClick={() => startEdit(item)} className="text-coffee-500 hover:text-[var(--color-primary)]">Editar</button>
-                  <button onClick={() => deleteItem(item.id)} className="text-coffee-500 hover:text-burgundy-500">Eliminar</button>
+            <div key={item.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm flex flex-col justify-between">
+              <div>
+                {item.url && <InstagramEmbed url={item.url} title={item.nombre} />}
+
+                <div className="flex justify-between items-start gap-2">
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-[var(--color-primary)] hover:underline flex items-center gap-1 text-base group"
+                  >
+                    <span>{item.nombre}</span>
+                    <span className="text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                  </a>
+                  <div className="flex gap-2 text-sm flex-shrink-0">
+                    <button onClick={() => startEdit(item)} className="text-coffee-500 hover:text-[var(--color-primary)]">Editar</button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`¿Eliminar la receta "${item.nombre}"?`)) deleteItem(item.id)
+                      }}
+                      className="text-coffee-500 hover:text-burgundy-500"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
+
+                {item.tags?.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {item.tags.map((t) => (
+                      <span key={t} className="text-xs bg-coffee-100 text-coffee-600 px-2 py-0.5 rounded-full">{t}</span>
+                    ))}
+                  </div>
+                )}
               </div>
-              {item.tags?.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {item.tags.map((t) => (
-                    <span key={t} className="text-xs bg-coffee-100 text-coffee-600 px-2 py-0.5 rounded-full">{t}</span>
-                  ))}
-                </div>
-              )}
-              <p className="text-xs text-coffee-300 mt-2">— {item.creado_por}</p>
+              <p className="text-xs text-coffee-300 mt-3 pt-2 border-t border-coffee-50">— {item.creado_por}</p>
             </div>
           ))}
         </div>

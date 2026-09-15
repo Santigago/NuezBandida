@@ -21,7 +21,7 @@ export default function FilterMenu({ activeCount = 0, children }) {
       >
         Filtrar
         {activeCount > 0 && (
-          <span className="bg-[var(--color-primary)] text-cream text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="bg-[var(--color-primary)] text-cream text-xs rounded-full min-w-5 h-5 px-1 flex items-center justify-center font-medium">
             {activeCount}
           </span>
         )}

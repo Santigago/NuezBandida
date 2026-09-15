@@ -101,10 +101,19 @@ export default function Tablero() {
           Tablero vacío :(
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 gap-4 mb-6">
+        <div className="grid sm:grid-cols-2 gap-4 items-start mb-6">
           {items.map((post) => (
             <div key={post.id} className="card-hover bg-white rounded-xl p-4 border border-coffee-100 shadow-sm">
-              {post.foto_url && <img src={post.foto_url} alt="" className="w-full h-40 object-cover rounded-lg mb-3" />}
+              {post.foto_url && (
+                <div className="overflow-hidden rounded-lg mb-3 bg-coffee-900/5 flex items-center justify-center">
+                  <img
+                    src={post.foto_url}
+                    alt=""
+                    className="w-full h-auto max-h-[520px] object-contain rounded-lg"
+                    loading="lazy"
+                  />
+                </div>
+              )}
               {post.texto && <p className="text-sm text-coffee-700">{post.texto}</p>}
 
               <div className="flex flex-wrap gap-1.5 mt-3">
@@ -180,7 +189,11 @@ export default function Tablero() {
           <div>
             <label className="block text-sm text-coffee-700 mb-1">Foto (opcional)</label>
             <ImageUploader folder="tablero" onUploaded={(url) => setForm((f) => ({ ...f, foto_url: url }))} />
-            {form.foto_url && <img src={form.foto_url} alt="Vista previa" className="mt-2 h-24 rounded-lg object-cover" />}
+            {form.foto_url && (
+              <div className="mt-2 max-w-xs rounded-lg overflow-hidden bg-coffee-100/50 flex items-center justify-center">
+                <img src={form.foto_url} alt="Vista previa" className="max-h-48 w-auto object-contain rounded-lg" />
+              </div>
+            )}
           </div>
           <div className="flex gap-3">
             <button
